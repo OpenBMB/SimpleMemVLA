@@ -19,34 +19,69 @@
 
 <table align="center">
   <tr>
+    <th colspan="3">Cover Blocks — take the lids off in red → green → blue order</th>
+  </tr>
+  <tr>
     <td align="center" width="33%">
-      <img src="assets/real_robot_1.gif" width="100%" alt="Real-robot cover blocks, run 1: blue, green, red from far to near"/>
+      <img src="assets/real_robot_cover_blocks_bgr.gif" width="100%" alt="Real-robot Cover Blocks, layout BGR: blue, green, red from far to near"/>
     </td>
     <td align="center" width="33%">
-      <img src="assets/real_robot_2.gif" width="100%" alt="Real-robot cover blocks, run 2: green, red, blue from far to near"/>
+      <img src="assets/real_robot_cover_blocks_grb.gif" width="100%" alt="Real-robot Cover Blocks, layout GRB: green, red, blue from far to near"/>
     </td>
     <td align="center" width="33%">
-      <img src="assets/real_robot_3.gif" width="100%" alt="Real-robot cover blocks, run 3: red, green, blue from far to near"/>
+      <img src="assets/real_robot_cover_blocks_rgb.gif" width="100%" alt="Real-robot Cover Blocks, layout RGB: red, green, blue from far to near"/>
     </td>
   </tr>
   <tr>
-    <td align="center"><b>Run 1</b> — blue, green, red</td>
-    <td align="center"><b>Run 2</b> — green, red, blue</td>
-    <td align="center"><b>Run 3</b> — red, green, blue</td>
+    <td align="center"><b>BGR</b> — blue, green, red</td>
+    <td align="center"><b>GRB</b> — green, red, blue</td>
+    <td align="center"><b>RGB</b> — red, green, blue</td>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <th colspan="4">Put Back Block — return the block to its initial mat after the button press</th>
+  </tr>
+  <tr>
+    <td align="center" width="25%">
+      <img src="assets/real_robot_put_back_block_up.gif" width="100%" alt="Real-robot Put Back Block, initial position Up: the block starts on the mat farthest from the arm bases"/>
+    </td>
+    <td align="center" width="25%">
+      <img src="assets/real_robot_put_back_block_down.gif" width="100%" alt="Real-robot Put Back Block, initial position Down: the block starts on the mat nearest the arm bases"/>
+    </td>
+    <td align="center" width="25%">
+      <img src="assets/real_robot_put_back_block_left.gif" width="100%" alt="Real-robot Put Back Block, initial position Left: the block starts on the mat beside the button"/>
+    </td>
+    <td align="center" width="25%">
+      <img src="assets/real_robot_put_back_block_right.gif" width="100%" alt="Real-robot Put Back Block, initial position Right: the block starts on the mat nearest the camera"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><b>Up</b></td>
+    <td align="center"><b>Down</b></td>
+    <td align="center"><b>Left</b></td>
+    <td align="center"><b>Right</b></td>
   </tr>
 </table>
 
 <div align="center">
 
-**SimpleMemVLA deployed on a real dual-arm robot.** Three colored blocks are covered one by
-one under identical opaque lids, then uncovered in **red → green → blue** — an order the policy
-can only follow by reading frames from earlier in the episode, since every lid on the table
-looks the same. Block positions differ in all three runs (layouts given far → near; clips play
-at 10x).
+**SimpleMemVLA on a real dual-arm robot**, fine-tuned on 180 (Cover Blocks) and 308 (Put Back
+Block) real-robot demonstrations. The lids must come off in **red → green → blue**,
+yet all three lids look the same; the block must go back to the mat it started on, yet all four
+mats are empty and identical while it waits at the center. Over 10 autonomous trials per initial
+position the policy succeeds in **35/60 (58.3%)** on Cover Blocks and **28/40 (70.0%)** on Put
+Back Block. The clips are successful rollouts, played 10x and 3x faster than the full recordings;
+Cover Blocks labels list the block colors from far to near.
 
-▶ **Full rollouts:** [run 1](assets/real_robot_1.mp4) · [run 2](assets/real_robot_2.mp4) ·
-[run 3](assets/real_robot_3.mp4)
-&nbsp;|&nbsp; [how these rule out a spatial routine →](#-real-robot-deployment)
+▶ **Full rollouts:** Cover Blocks [BGR](assets/real_robot_cover_blocks_bgr.mp4) ·
+[GRB](assets/real_robot_cover_blocks_grb.mp4) · [RGB](assets/real_robot_cover_blocks_rgb.mp4)
+&nbsp;|&nbsp; Put Back Block [Up](assets/real_robot_put_back_block_up.mp4) ·
+[Down](assets/real_robot_put_back_block_down.mp4) ·
+[Left](assets/real_robot_put_back_block_left.mp4) ·
+[Right](assets/real_robot_put_back_block_right.mp4)
+&nbsp;|&nbsp; [success rates and why both tasks need memory →](#-real-robot-deployment)
 
 </div>
 
@@ -69,8 +104,9 @@ at 10x).
 📰 News
 -------
 
-* **[2026-09]** SimpleMemVLA deployed on a real dual-arm robot for the *cover blocks* memory
-  task — three autonomous rollouts, three block layouts, lids removed in red → green → blue
+* **[2026-09]** SimpleMemVLA fine-tuned on real-robot demonstrations and deployed on
+  a real dual-arm robot for two memory tasks — *Cover Blocks* 35/60 (58.3%) and *Put Back Block*
+  28/40 (70.0%), 10 autonomous trials per initial position
   ([🦾 Real-Robot Deployment](#-real-robot-deployment)).
 * **[2026-09]** Preprint on arXiv: [arXiv:2609.05533](https://arxiv.org/abs/2609.05533)
   ([PDF](https://arxiv.org/pdf/2609.05533)).
@@ -81,8 +117,8 @@ at 10x).
 -------
 
 - [x] arXiv preprint release ([arXiv:2609.05533](https://arxiv.org/abs/2609.05533))
-- [x] Real-robot deployment — *cover blocks* on a dual-arm robot, policy running autonomously
-      ([rollouts](#-real-robot-deployment))
+- [x] Real-robot deployment — *Cover Blocks* (58.3%) and *Put Back Block* (70.0%) on a dual-arm
+      robot, 10 autonomous trials per initial position ([results](#-real-robot-deployment))
 
 🧠 Overview
 -----------
@@ -497,55 +533,88 @@ CHECKPOINT=<ckpt> bash scripts/eval_rmbench_openloop.sh      # likewise robomme/
 🦾 Real-Robot Deployment
 ------------------------
 
-Every number above comes from a simulator this repository also trains in. Here the released
-policy **runs closed-loop on a real dual-arm robot**, on the physical table-top task **cover
-blocks**: three colored blocks (red, green — a pale mint — and blue) stand in a row, the robot
-covers each of them with an opaque lid, and then has to take the lids off in red → green → blue
-order. Block positions are shuffled between runs. Across the three rollouts below every block
-is covered before any lid is lifted, and the lids then come off red → green → blue every time.
+Every number above comes from a simulator this repository also trains in. Here SimpleMemVLA is
+fine-tuned on real-robot demonstrations — 180 for Cover Blocks, 308 for Put Back
+Block — and then deployed on a real dual-arm robot, where it runs autonomously. Both are table-top
+tasks that turn on something the table stops showing, and each is scored over 10 autonomous
+trials per initial position.
 
-**Why a fixed spatial routine will not do.** Every lid is in place before the first one comes
-off: at that decision no color is visible anywhere on the table, and no block is ever
-displaced, so the color-to-position binding survives only in frames from earlier in the
-episode — the first block covered waits 52 s – 98 s for its turn. A policy reading only the
-current observation sees three identical black lids. The arm places the lids far to near in
-all three runs while the removal order follows no fixed direction along the row, so a spatial
-habit — always near to far, always the same seat in the row — has to be wrong in at least one
-of them.
+**Cover Blocks.** Three colored blocks (red, green — a pale mint — and blue) stand in a row beside
+three identical black lids. The robot covers every block with a lid, then has to take the lids
+off in red → green → blue order. An initial position is named by the block colors from far to
+near as seen from the camera (top to bottom of the frame), so **BGR** puts blue farthest and red
+nearest; the six columns below are the six orderings of the three colors. Policy fine-tuned on
+180 real-robot demonstrations, 10 autonomous trials per initial position:
 
-| Run | Layout, far → near | Lids placed | Lids removed | Removal order equals |
+| Initial position | RGB | GRB | GBR | RBG | BRG | BGR | Overall |
+|---|---|---|---|---|---|---|---|
+| Success | 8/10 | 6/10 | 7/10 | 6/10 | 5/10 | 3/10 | **35/60 = 58.3%** |
+
+**Why Cover Blocks needs memory.** In the recordings every lid is in place before the first one
+comes off: at that decision no color is visible anywhere on the table, and no block is ever
+displaced, so the color-to-position binding survives only in frames from earlier in the episode —
+the first block covered waits 52 s – 98 s for its turn. A policy reading only the current
+observation sees three identical black lids. A fixed removal routine, taking the same seats in the
+same order every time, yields red → green → blue from only one of the six initial positions; the
+policy succeeds from all six.
+
+The three recordings are successful rollouts from three of the six initial positions. In all
+three the robot places the lids far to near, while the removal order follows no fixed direction
+along the row, so a spatial habit — always near to far, always the same seat in the row — has to
+be wrong in at least one of them.
+
+| Recording | Layout, far → near | Lids placed | Lids removed | Removal order equals |
 |---|---|---|---|---|
-| **Run 1** (131 s) | blue, green, red | far → near | red → green → blue | placement reversed; near → far |
-| **Run 2** (137 s) | green, red, blue | far → near | red → green → blue | *neither* — middle, far, near |
-| **Run 3** (126 s) | red, green, blue | far → near | red → green → blue | placement; far → near |
+| **BGR** (131 s) | blue, green, red | far → near | red → green → blue | placement reversed; near → far |
+| **GRB** (137 s) | green, red, blue | far → near | red → green → blue | *neither* — middle, far, near |
+| **RGB** (126 s) | red, green, blue | far → near | red → green → blue | placement; far → near |
 
-Run 2 carries the argument. There the required color order is neither the placement order nor
-its reverse, and as a path across the table it runs middle, far, near — so it is not produced
-by replaying the placement sequence, by playing it backwards, or by sweeping the row in either
-direction. Runs 1 and 3, taken alone, would not separate such a shortcut from reading the
-history: run 1 removes in exactly the reverse of the order the lids went down, run 3 repeats
-that order, and in both the colors already lie red, green, blue along the row — near to far in
-run 1, far to near in run 3.
+GRB carries the argument. There the required color order is neither the placement order nor its
+reverse, and as a path across the table it runs middle, far, near — so it is not produced by
+replaying the placement sequence, by playing it backwards, or by sweeping the row in either
+direction. BGR and RGB, taken alone, would not separate such a shortcut from reading the history:
+BGR removes in exactly the reverse of the order the lids went down, RGB repeats that order, and in
+both the colors already lie red, green, blue along the row — near to far in BGR, far to near in
+RGB.
 
 <div align="center">
-<a href="assets/fig_real_robot_runs.png"><img src="assets/fig_real_robot_runs.png" alt="Three real-robot runs of the cover-blocks task, each shown at its initial layout, fully covered, and after the lids come off" width="90%"/></a>
+<a href="assets/fig_real_robot_cover_blocks.png"><img src="assets/fig_real_robot_cover_blocks.png" alt="Real-robot Cover Blocks in the BGR, GRB and RGB layouts, each at its initial layout, with all three blocks covered, and after the lids come off" width="90%"/></a>
 
-*The same three autonomous rollouts frozen at three moments each: the initial layout, the
-interval in which every block is hidden under an opaque lid, and the table once the lids come
-off (dual-arm platform, hand-held camera; 131 s / 137 s / 126 s). No block is repositioned, so
-every reveal is a lid moving, not a block.*
+*The three Cover Blocks recordings (rows BGR, GRB, RGB; 131 s / 137 s / 126 s) frozen at three
+moments each: the initial layout, all three blocks hidden under their lids, and the table once the
+lids come off. No block is repositioned, so every reveal is a lid moving, not a block. The GIFs at
+the top are cropped from these recordings and play at 10x.*
 </div>
 
-<!-- Inline players need GitHub-hosted attachments; an mp4 committed under assets/ cannot
-     play on github.com. Upload each clip to a comment box on an issue in this repository and
-     paste the resulting https://github.com/user-attachments/assets/<uuid> URLs here, one per
-     paragraph. -->
+**Put Back Block.** A yellow block starts on one of four identical white paper mats laid out as a
+plus around a bare green center square, with a round button just beyond the plus. The robot moves
+the block to the center and presses the button, then has to put the block back on the mat it
+started from. The initial position names that mat as on a top-down map with the robot along the
+bottom edge: **Up** is the mat farthest from the arm bases, **Down** the nearest, **Left** the one
+beside the button and **Right** the one nearest the camera. Policy fine-tuned on 308
+real-robot demonstrations, 10 autonomous trials per initial position:
 
-**Scope.** These are three autonomous rollouts of the deployed policy, not a benchmark: there
-is no success rate, no trial count and no baseline here, and the quantitative claims in
-[📊 Results](#-results) remain the simulator protocols. What the three rollouts establish is
-the behavior under deployment — the policy ordering its own removals by color, from layouts a
-fixed spatial routine cannot serve.
+| Initial position | Up | Down | Left | Right | Overall |
+|---|---|---|---|---|---|
+| Success | 7/10 | 9/10 | 4/10 | 8/10 | **28/40 = 70.0%** |
+
+**Why Put Back Block needs memory.** In each recording one arm carries the block and the other
+presses the button. The original mat stays empty from the moment the block is lifted until it is
+set back — more than half of the recording — and while the block waits at the center through the
+button press, all four mats are empty and look the same: no mat moves and nothing is left on the
+one the block came from. When the arm returns for the block, the mats no longer show where it
+started; earlier frames do. Putting the block back on the same mat every time would succeed from
+only one of the four initial positions; the policy succeeds from all four, and each of the four
+recordings, one per initial position, returns the block to its own mat.
+
+<div align="center">
+<a href="assets/fig_real_robot_put_back_block.png"><img src="assets/fig_real_robot_put_back_block.png" alt="Real-robot Put Back Block from initial positions Up, Down, Left and Right: the block on its initial mat, at the center after the button press, and put back" width="80%"/></a>
+
+*The four Put Back Block recordings, one row per initial position (Up, Down, Left, Right), frozen
+at three moments each: the block on its initial mat, the block at the center after the button
+press, and the block put back. In the middle column all four mats are empty in every row. The GIFs
+at the top are cropped from these recordings and play at 3x.*
+</div>
 
 🧩 Extending to a New Benchmark
 -------------------------------
