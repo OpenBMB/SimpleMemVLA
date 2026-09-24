@@ -104,6 +104,9 @@ Cover Blocks labels list the block colors from far to near.
 📰 News
 -------
 
+* **[2026-09]** Listed on the third-party [RoboDojo-Sim leaderboard][robodojo-lb]:
+  **5th of 48 on the Memory dimension**, 12th on the overall average, with every rollout
+  published for inspection ([details](#-results)).
 * **[2026-09]** SimpleMemVLA fine-tuned on real-robot demonstrations and deployed on
   a real dual-arm robot for two memory tasks — *Cover Blocks* 35/60 (58.3%) and *Put Back Block*
   28/40 (70.0%), 10 autonomous trials per initial position
@@ -117,6 +120,8 @@ Cover Blocks labels list the block colors from far to near.
 -------
 
 - [x] arXiv preprint release ([arXiv:2609.05533](https://arxiv.org/abs/2609.05533))
+- [x] Third-party [RoboDojo-Sim][robodojo-lb] submission — 5th/48 on Memory, 12th overall
+      ([results](#-results))
 - [x] Real-robot deployment — *Cover Blocks* (58.3%) and *Put Back Block* (70.0%) on a dual-arm
       robot, 10 autonomous trials per initial position ([results](#-real-robot-deployment))
 
@@ -231,6 +236,39 @@ One model per suite, closed-loop evaluation under each benchmark's official prot
 | **RoboMemArena** (memory, >1k-step episodes) | 26 tasks, 51 trials/task, TSR / CSR | **63.6 / 72.1** | 46.2 / 63.9 (FrameSamp+Modul); 46.1 TSR (GT oracle) |
 | **LIBERO** (general-purpose control) | 4 suites, 500 trials/suite | **97.5** | 97.5 (tie, RIPT-VLA) |
 | **LIBERO-Plus** (zero-shot robustness) | 10,030 perturbed tasks, trained on LIBERO only | **78.4** | 73.1 (MemoryVLA++) |
+
+**Independent evaluation: RoboDojo-Sim.** RoboDojo runs the evaluation itself — three seeds
+per task, on hidden verification layouts alongside the public ones — so these numbers are
+computed by the benchmark rather than self-reported. On the
+[RoboDojo-Sim leaderboard][robodojo-lb] (snapshot 2026-09-23; 48 entries, 42 tasks, ARX X5)
+SimpleMemVLA is **5th of 48 on the Memory dimension** and 12th on the overall average, which
+RoboDojo computes as the unweighted mean of the five dimension scores (Generalization is
+itself the mean of the standard and randomized layouts). Both a Score and a success rate (SR)
+are reported per dimension:
+
+| RoboDojo-Sim dimension | Tasks | Score | SR | Rank |
+|---|---|---|---|---|
+| **Memory** | 6 | **33.71** | **33.22%** | **5 / 48** |
+| Long-Horizon | 8 | 14.58 | 5.50% | 22 / 48 |
+| Precision | 8 | 7.42 | 2.92% | 25 / 48 |
+| Generalization | 12 (+12 randomized) | 6.36 | 3.95% | 24 / 48 |
+| Open | 8 | 0.85 | 0.75% | 22 / 48 |
+| **Average** | mean of the 5 | 12.58 | 9.27% | 12 / 48 |
+
+The split is the result, not an asterisk on it: SimpleMemVLA is trained as a memory policy
+rather than a generalist, and it lands top-5 on Memory while sitting 22nd–25th on the other
+four dimensions. On Memory its score is 2.5x the 7th entry; the four entries above it are
+DM0.5, GPT-6-Astra and LiberAI's Liber-0 Preview / Lite. Per task it ranks 3rd on
+`press_by_number` (56.67 / 57.00%), 4th on `swap_blocks`, 5th on `cover_blocks`
+(93.17 / 91.00%), and 17th on `imitate_sorting_sequence` — its one weak memory task. Rollouts
+for all 54 evaluation entries (42 tasks plus the 12 randomized variants) are published for
+inspection, three runs each:
+[robodojo-benchmark.com/leaderboard/rollouts/SimpleMemVLA][robodojo-rollouts]. The entry
+covers RoboDojo-Sim only; the RoboDojo-RealWorld track is a separate submission we have not
+entered.
+
+[robodojo-lb]: https://robodojo-benchmark.com/leaderboard
+[robodojo-rollouts]: https://robodojo-benchmark.com/leaderboard/rollouts/SimpleMemVLA
 
 **Isolating the memory interface.** Holding the backbone, data, sub-task supervision, action
 head and optimizer fixed and swapping only how history reaches the model, native video context
