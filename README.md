@@ -671,6 +671,17 @@ at the top are cropped from these recordings and play at 3x.*
    are working references, from single-env adapters (`robomemarena_sim`) to batched group
    rollout (`rmbench_sim`).
 
+⭐ Star History
+---------------
+
+<a href="https://www.star-history.com/?repos=openbmb%2Fsimplememvla&type=date&legend=top-left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=openbmb/simplememvla&type=date&theme=dark&legend=top-left" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=openbmb/simplememvla&type=date&legend=top-left" />
+    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=openbmb/simplememvla&type=date&legend=top-left" width="100%" />
+  </picture>
+</a>
+
 🙏 Acknowledgements
 -------------------
 
